@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from vllm.config import VllmConfig
     from vllm.v1.request import Request
 
-logger = init_logger(__name__)
+logger = init_logger("vllm.grammar_draft")  # under vLLM's log config
 
 
 class GrammarDraftHook:

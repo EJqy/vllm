@@ -24,7 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from bench_structured import bench, make_parser  # noqa: E402
 from sampling_check import collect as collect_samples  # noqa: E402
-from server import Server  # noqa: E402
+from server import LOG_DIR, Server  # noqa: E402
 
 RESULTS = Path(__file__).resolve().parents[1] / "results" / "baseline"
 SUMMARY_KEYS = [
@@ -110,7 +110,7 @@ def main():
     summary_csv = out_root / "summary.csv"
     for cfg_str in args.configs:
         cfg = parse_config(cfg_str)
-        srv = Server(**cfg)
+        srv = Server(**cfg, log_dir=LOG_DIR / args.tag)
         cells = [(ds, c) for ds in args.datasets for c in args.concurrency]
         path = {cell: out_root / srv.run_id / f"{cell[0]}_c{cell[1]}.json"
                 for cell in cells}

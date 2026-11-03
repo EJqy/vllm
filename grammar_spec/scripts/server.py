@@ -126,9 +126,12 @@ class Server:
     """Context manager: start a server, inspect it, stop it on exit."""
 
     def __init__(self, method, k=5, ws="compact", sync=False, runner="auto",
-                 port=8000, run_id=None, extra=(), grammar_draft=None):
+                 port=8000, run_id=None, extra=(), grammar_draft=None,
+                 log_dir=None):
         """`grammar_draft`: None, "hybrid" or "grammar_only" enables the
-        vllm-grammar-draft plugin (which requires synchronous scheduling)."""
+        vllm-grammar-draft plugin (which requires synchronous scheduling).
+        `log_dir`: where logs go; must be unique per experiment because
+        results/ is append-only (default: results/logs/adhoc)."""
         if grammar_draft and not sync:
             raise ValueError("the grammar-draft plugin needs sync=True")
         self.method, self.k, self.ws, self.sync = method, k, ws, sync
@@ -136,15 +139,24 @@ class Server:
         self.grammar_draft = grammar_draft
         self.run_id = run_id or run_id_for(method, k, ws, sync, runner,
                                            grammar_draft)
-        self.log_path = LOG_DIR / f"serve_{self.run_id}.log"
-        self.gd_stats_path = (
-            LOG_DIR / f"serve_{self.run_id}.gd_stats.json" if grammar_draft else None
-        )
+        self.log_dir = Path(log_dir) if log_dir else LOG_DIR / "adhoc"
+        self.log_path = self.gd_stats_path = None
         self.proc = None
         self.meta = None
 
+    def _new_log_paths(self):
+        """Fresh file names; a resumed run never overwrites an earlier log."""
+        self.log_dir.mkdir(parents=True, exist_ok=True)
+        stem, n = f"serve_{self.run_id}", 1
+        while (self.log_dir / f"{stem}.log").exists():
+            n += 1
+            stem = f"serve_{self.run_id}.{n}"
+        self.log_path = self.log_dir / f"{stem}.log"
+        if self.grammar_draft:
+            self.gd_stats_path = self.log_dir / f"{stem}.gd_stats.json"
+
     def start(self):
-        LOG_DIR.mkdir(parents=True, exist_ok=True)
+        self._new_log_paths()
         env = dict(os.environ, VLLM_SERVER_DEV_MODE="1")
         if self.runner != "auto":
             env["VLLM_USE_V2_MODEL_RUNNER"] = "1" if self.runner == "v2" else "0"
@@ -171,7 +183,10 @@ class Server:
                     if k.startswith(("VLLM_", "GRAMMAR_DRAFT"))},
             "startup_s": round(startup_s, 1),
             "grammar_draft": self.grammar_draft,
-            "grammar_draft_active": "Grammar draft enabled" in log,
+            # Both the plugin's log line and its stats file (written by its
+            # flush thread) must appear; neither may without the plugin.
+            "grammar_draft_active": "Grammar draft enabled" in log
+            and self.gd_stats_path is not None and self.gd_stats_path.exists(),
             "gd_stats_path": str(self.gd_stats_path) if self.gd_stats_path else None,
             **inspect_server(self.port, self.log_path),
         }
