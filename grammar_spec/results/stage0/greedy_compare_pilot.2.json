@@ -1,0 +1,47 @@
+{
+  "reference": "eagle3_k5_compact",
+  "cells": {
+    "bfcl_c1": {
+      "eagle3_k5_compact_sync": {
+        "identical": 40,
+        "total": 40
+      },
+      "eagle3_k5_compact_sync_gd": {
+        "identical": 40,
+        "total": 40
+      },
+      "none_compact": {
+        "identical": 40,
+        "total": 40
+      }
+    },
+    "jsonmode_c1": {
+      "eagle3_k5_compact_sync": {
+        "identical": 40,
+        "total": 40
+      },
+      "eagle3_k5_compact_sync_gd": {
+        "identical": 40,
+        "total": 40
+      },
+      "none_compact": {
+        "identical": 40,
+        "total": 40
+      }
+    },
+    "longschema_c1": {
+      "eagle3_k5_compact_sync": {
+        "identical": 16,
+        "total": 16
+      },
+      "eagle3_k5_compact_sync_gd": {
+        "identical": 16,
+        "total": 16
+      },
+      "none_compact": {
+        "identical": 16,
+        "total": 16
+      }
+    }
+  }
+}

@@ -2,7 +2,8 @@
 
 ## 当前状态
 
-- **阶段 0 已完成（2026-11-03）。** 用户随后要求直接实现混合语法起草插件，进行中。
+- **阶段 0 已完成（2026-11-03）。**
+- **混合语法起草插件第一版已完成并初步验证（2026-11-03）**：`grammar_spec/plugin/`，未改 vLLM 源码。c=1、K=5、紧凑 JSON 下，TPOT 比官方默认 EAGLE-3（异步）低 8.1% / 27.4% / 23.0%（json-mode-eval / BFCL / 长 schema），贪心输出 96/96 逐字一致。原始结果在 `results/baseline/pilot/`，详见 `grammar_spec/project_report.md`。按用户要求，先只做最简验证，扩展测试暂缓。
 - 阶段 0 最重要的结论：**报告第四节写的路线 A（只改调度器）在当前 main 上不成立**，原因有三：V2 runner 下调度器改不了草稿内容；不另加补丁的话，路线 A 只能在 V1 + 同步调度下工作；上游有一个草稿 PR #63373 正在删除 V1 runner。详见 a 节。
 
 ## 环境
@@ -186,13 +187,20 @@ xgrammar 紧凑模式空白 bug 的抽查（`any_whitespace=False, separators=("
 
 ## 下一步
 
-阶段 0 汇报中途，用户（11-03）要求直接实现"语法确定 token 当草稿 + EAGLE-3/n-gram 补位"的混合起草（以插件形式，尽量不改 vLLM 源码），并验收性能。实现方案见 `grammar_spec/project_report.md`。
+等用户确认后再做（按用户要求，先暂缓）：
+1. 官方 EAGLE-3 扫 K=1–7 取最优（CLAUDE.md 规则 3），插件也扫 K。
+2. 并发 4/16/64。插件要求同步调度，要看高并发下收益能否覆盖同步的代价。
+3. 温度 1 分布检验（`scripts/sampling_check.py` 已写好）。
+4. 完整矩阵的命令已写好，但在启动后约 1 分钟被叫停，没有产生结果（只留下 `results/logs/main/` 下一个被中止的服务日志）。
 
 ## 失败的尝试及原因
 
 - py-spy 无法 attach EngineCore（容器没有 SYS_PTRACE），改用 `/server_info` 读取实际配置。
 - 第一次解析 Prometheus 指标时没有去掉 label，导致 KeyError；已在 `bench_structured.py` 里修正。
 - 阶段 0 中有几条一次性的 JSON 查看命令用了系统 `python3`，违反 AGENTS.md；之后统一用 `.venv/bin/python`。
+- 插件第一次启动被误判为未生效：插件的 logger 不在 vLLM 的 `vllm` 日志命名空间下，INFO 日志被丢弃，`server.py` 找不到启用日志就把服务关了。已改为 `vllm.grammar_draft`，并额外要求插件的统计文件存在（失败的日志在 `results/logs/pilot/serve_eagle3_k5_compact_sync_gd.log`）。
+- 试点一开始与阶段 0 用了同一个日志文件名，覆盖了已提交的阶段 0 日志；已从 git 恢复，试点日志移到 `results/logs/pilot/`，`server.py` 现在按实验分目录并且绝不覆盖已有文件。
+- 最初用 `<|im_start|>` 作补位 token：xgrammar 每次拒绝特殊 token 都会打一条警告，vLLM 每步算 bitmask 时都会触发。改用 `\x00`（普通 token，被拒时不打警告，JSON 里任何位置都非法）。
 
 ## 未解决的问题
 

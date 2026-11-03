@@ -1,0 +1,4 @@
+# /root/gsd/vllm/.venv/bin/vllm serve Qwen/Qwen3-32B --quantization fp8_per_tensor --max-model-len 8192 --host 127.0.0.1 --port 8000 --speculative-config {"method": "eagle3", "model": "RedHatAI/Qwen3-32B-speculator.eagle3", "num_speculative_tokens": 5} --structured-outputs-config {"backend": "xgrammar", "disable_any_whitespace": true} --no-async-scheduling
+W1103 13:35:17.862000 110883 torch/_opaque_base.py:6] torch._opaque_base is deprecated, use torch._custom_class_base instead
+W1103 13:35:17.863000 110883 torch/_library/opaque_object.py:288] register_opaque_type is deprecated, use register_custom_class instead
+W1103 13:35:17.863000 110883 torch/_library/opaque_object.py:211] typ='value' is deprecated, use typ='constant' instead

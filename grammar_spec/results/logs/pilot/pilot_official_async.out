@@ -1,0 +1,4 @@
+[server] eagle3_k5_compact up in 69.0s runner=V2 async=True grammar_draft=None
+  jsonmode c=1 n=40: TPOT=7.67ms out_tps=119 AL=2.5738396624472575 schema_ok=1.00 wall=26.2s
+  bfcl c=1 n=40: TPOT=9.15ms out_tps=93 AL=2.2157221206581355 schema_ok=1.00 wall=12.9s
+  longschema c=1 n=16: TPOT=8.36ms out_tps=115 AL=2.240493987650309 schema_ok=1.00 wall=60.1s

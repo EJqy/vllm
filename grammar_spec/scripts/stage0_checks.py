@@ -36,7 +36,10 @@ class EmptyProposer:
 
 def save(name, obj):
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    path = OUT_DIR / name
+    path, n = OUT_DIR / name, 1
+    while path.exists():  # results/ is append-only
+        n += 1
+        path = OUT_DIR / f"{Path(name).stem}.{n}{Path(name).suffix}"
     path.write_text(json.dumps(obj, indent=2, ensure_ascii=False))
     print(json.dumps(obj, indent=2, ensure_ascii=False)[:4000])
     print(f"-> {path}")
