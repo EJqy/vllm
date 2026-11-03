@@ -1,0 +1,10 @@
+W1103 13:31:51.756000 107818 torch/_opaque_base.py:6] torch._opaque_base is deprecated, use torch._custom_class_base instead
+W1103 13:31:51.757000 107818 torch/_library/opaque_object.py:288] register_opaque_type is deprecated, use register_custom_class instead
+W1103 13:31:51.758000 107818 torch/_library/opaque_object.py:211] typ='value' is deprecated, use typ='constant' instead
+[skip] none_compact: all cells done
+[skip] eagle3_k5_compact_sync: all cells done
+[server] eagle3_k5_compact_sync_gd up in 69.0s runner=V2 async=False grammar_draft=hybrid
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  jsonmode c=1 n=40: TPOT=7.05ms out_tps=129 AL=2.870546318289786 schema_ok=1.00 wall=23.1s
+  bfcl c=1 n=40: TPOT=6.64ms out_tps=122 AL=3.054263565891473 schema_ok=1.00 wall=12.1s
+  longschema c=1 n=16: TPOT=6.44ms out_tps=147 AL=3.0731489741302407 schema_ok=1.00 wall=52.6s

@@ -64,10 +64,10 @@ def num_prompts(ds, c, scale):
     return max(round(lo * scale), round(per_slot * scale) * c)
 
 
-def run_cell(srv, cfg, ds, c, n, path, args):
+def run_cell(srv, cfg, ds, c, n, path, args, warmup):
     bargs = make_parser().parse_args([
         "--dataset", ds, "--num-prompts", str(n), "--max-concurrency", str(c),
-        "--temperature", "0", "--num-warmup", str(min(c, 8)),
+        "--temperature", "0", "--num-warmup", str(warmup),
         "--reset-prefix-cache", "--out", str(path), "--save-outputs",
         *(["--expect-compact"] if cfg["ws"] == "compact" else []),
         *(["--bfcl-root", args.bfcl_root] if args.bfcl_root else []),
@@ -126,10 +126,12 @@ def main():
                   f"runner={srv.meta['model_runner']} "
                   f"async={srv.meta['async_scheduling']} "
                   f"grammar_draft={srv.meta['grammar_draft']}", flush=True)
-            for ds, c in todo:
+            for i, (ds, c) in enumerate(todo):
                 n = num_prompts(ds, c, args.prompt_scale)
                 t0 = time.time()
-                res = run_cell(srv, cfg, ds, c, n, path[(ds, c)], args)
+                # Warm the fresh server once; later cells reuse its caches.
+                warmup = 8 if i == 0 else 0
+                res = run_cell(srv, cfg, ds, c, n, path[(ds, c)], args, warmup)
                 row = summary_row(srv, cfg, ds, c, n, res, time.time() - t0)
                 new = not summary_csv.exists()
                 with open(summary_csv, "a", newline="") as f:

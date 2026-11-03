@@ -315,7 +315,7 @@ async def read_grammar_draft_stats(path):
     """The plugin's counters (GRAMMAR_DRAFT_STATS), after its next flush."""
     if not path:
         return None
-    await asyncio.sleep(1.0)
+    await asyncio.sleep(0.6)  # the plugin flushes every 0.5 s
     return json.loads(Path(path).read_text())
 
 

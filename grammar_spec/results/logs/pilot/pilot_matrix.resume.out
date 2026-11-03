@@ -1,0 +1,17 @@
+W1103 13:26:20.368000 103304 torch/_opaque_base.py:6] torch._opaque_base is deprecated, use torch._custom_class_base instead
+W1103 13:26:20.368000 103304 torch/_library/opaque_object.py:288] register_opaque_type is deprecated, use register_custom_class instead
+W1103 13:26:20.369000 103304 torch/_library/opaque_object.py:211] typ='value' is deprecated, use typ='constant' instead
+[skip] none_compact: all cells done
+[server] eagle3_k5_compact_sync up in 69.0s runner=V2 async=False grammar_draft=None
+  longschema c=1 n=16: TPOT=8.85ms out_tps=109 AL=2.240493987650309 schema_ok=1.00 wall=68.5s
+Traceback (most recent call last):
+  File "/root/gsd/vllm/grammar_spec/scripts/run_matrix.py", line 155, in <module>
+    main()
+  File "/root/gsd/vllm/grammar_spec/scripts/run_matrix.py", line 124, in main
+    with srv:
+  File "/root/gsd/vllm/grammar_spec/scripts/server.py", line 208, in __enter__
+    return self.start()
+           ^^^^^^^^^^^^
+  File "/root/gsd/vllm/grammar_spec/scripts/server.py", line 191, in start
+    raise RuntimeError(f"grammar draft plugin state mismatch: {self.meta}")
+RuntimeError: grammar draft plugin state mismatch: {'run_id': 'eagle3_k5_compact_sync_gd', 'cmd': ['/root/gsd/vllm/.venv/bin/vllm', 'serve', 'Qwen/Qwen3-32B', '--quantization', 'fp8_per_tensor', '--max-model-len', '8192', '--host', '127.0.0.1', '--port', '8000', '--speculative-config', '{"method": "eagle3", "model": "RedHatAI/Qwen3-32B-speculator.eagle3", "num_speculative_tokens": 5}', '--structured-outputs-config', '{"backend": "xgrammar", "disable_any_whitespace": true}', '--no-async-scheduling'], 'env': {'VLLM_SERVER_DEV_MODE': '1', 'GRAMMAR_DRAFT': '1', 'GRAMMAR_DRAFT_MODE': 'hybrid', 'GRAMMAR_DRAFT_STATS': '/root/gsd/vllm/grammar_spec/results/logs/pilot/serve_eagle3_k5_compact_sync_gd.gd_stats.json'}, 'startup_s': 72.0, 'grammar_draft': 'hybrid', 'grammar_draft_active': False, 'gd_stats_path': '/root/gsd/vllm/grammar_spec/results/logs/pilot/serve_eagle3_k5_compact_sync_gd.gd_stats.json', 'model_runner': 'V2', 'v2_fallback_warning': None, 'async_scheduling': False, 'async_disabled_warning': None, 'max_num_seqs': 1024, 'max_num_batched_tokens': 8192, 'spec_method': 'eagle3', 'num_speculative_tokens': 5, 'draft_sample_method': 'greedy', 'disable_any_whitespace': True, 'so_backend': 'xgrammar', 'kv_cache_line': '(EngineCore pid=105619) INFO 11-03 13:29:54 [kv_cache_utils.py:1171] GPU KV cache size: 194,048 tokens, Maximum concurrency for 8,192 tokens per request: 23.69x'}

@@ -1,0 +1,35 @@
+{
+  "reference": "eagle3_k5_compact_sync",
+  "cells": {
+    "bfcl_c1": {
+      "eagle3_k5_compact_sync_gd": {
+        "identical": 40,
+        "total": 40
+      },
+      "none_compact": {
+        "identical": 40,
+        "total": 40
+      }
+    },
+    "jsonmode_c1": {
+      "eagle3_k5_compact_sync_gd": {
+        "identical": 40,
+        "total": 40
+      },
+      "none_compact": {
+        "identical": 40,
+        "total": 40
+      }
+    },
+    "longschema_c1": {
+      "eagle3_k5_compact_sync_gd": {
+        "identical": 16,
+        "total": 16
+      },
+      "none_compact": {
+        "identical": 16,
+        "total": 16
+      }
+    }
+  }
+}

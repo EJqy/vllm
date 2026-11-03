@@ -1,0 +1,37 @@
+{
+  "run_id": "none_compact",
+  "cmd": [
+    "/root/gsd/vllm/.venv/bin/vllm",
+    "serve",
+    "Qwen/Qwen3-32B",
+    "--quantization",
+    "fp8_per_tensor",
+    "--max-model-len",
+    "8192",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "8000",
+    "--structured-outputs-config",
+    "{\"backend\": \"xgrammar\", \"disable_any_whitespace\": true}"
+  ],
+  "env": {
+    "VLLM_SERVER_DEV_MODE": "1"
+  },
+  "startup_s": 60.0,
+  "grammar_draft": null,
+  "grammar_draft_active": false,
+  "gd_stats_path": null,
+  "model_runner": "V2",
+  "v2_fallback_warning": null,
+  "async_scheduling": true,
+  "async_disabled_warning": null,
+  "max_num_seqs": 1024,
+  "max_num_batched_tokens": 8192,
+  "spec_method": null,
+  "num_speculative_tokens": null,
+  "draft_sample_method": null,
+  "disable_any_whitespace": true,
+  "so_backend": "xgrammar",
+  "kv_cache_line": "(EngineCore pid=98557) INFO 11-03 13:18:42 [kv_cache_utils.py:1171] GPU KV cache size: 223,232 tokens, Maximum concurrency for 8,192 tokens per request: 27.25x"
+}

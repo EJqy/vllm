@@ -1,0 +1,136 @@
+{
+  "args": {
+    "dataset": "longschema",
+    "gd_stats": "/root/gsd/vllm/grammar_spec/results/logs/pilot/serve_eagle3_k5_compact_sync_gd.2.gd_stats.json",
+    "bfcl_root": "/root/.cache/grammar_spec/gorilla/berkeley-function-call-leaderboard/bfcl_eval/data",
+    "num_prompts": 16,
+    "max_concurrency": 1,
+    "output_len": 1024,
+    "temperature": 0.0,
+    "seed": 0,
+    "num_warmup": 1,
+    "reset_prefix_cache": true,
+    "expect_compact": true,
+    "request_timeout": 1800,
+    "port": 8000,
+    "out": "/root/gsd/vllm/grammar_spec/results/baseline/pilot/eagle3_k5_compact_sync_gd/longschema_c1.json",
+    "save_outputs": true,
+    "thinking": "off"
+  },
+  "server": {
+    "run_id": "eagle3_k5_compact_sync_gd",
+    "cmd": [
+      "/root/gsd/vllm/.venv/bin/vllm",
+      "serve",
+      "Qwen/Qwen3-32B",
+      "--quantization",
+      "fp8_per_tensor",
+      "--max-model-len",
+      "8192",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8000",
+      "--speculative-config",
+      "{\"method\": \"eagle3\", \"model\": \"RedHatAI/Qwen3-32B-speculator.eagle3\", \"num_speculative_tokens\": 5}",
+      "--structured-outputs-config",
+      "{\"backend\": \"xgrammar\", \"disable_any_whitespace\": true}",
+      "--no-async-scheduling"
+    ],
+    "env": {
+      "VLLM_SERVER_DEV_MODE": "1",
+      "GRAMMAR_DRAFT": "1",
+      "GRAMMAR_DRAFT_MODE": "hybrid",
+      "GRAMMAR_DRAFT_STATS": "/root/gsd/vllm/grammar_spec/results/logs/pilot/serve_eagle3_k5_compact_sync_gd.2.gd_stats.json"
+    },
+    "startup_s": 69.0,
+    "grammar_draft": "hybrid",
+    "grammar_draft_active": true,
+    "gd_stats_path": "/root/gsd/vllm/grammar_spec/results/logs/pilot/serve_eagle3_k5_compact_sync_gd.2.gd_stats.json",
+    "model_runner": "V2",
+    "v2_fallback_warning": null,
+    "async_scheduling": false,
+    "async_disabled_warning": null,
+    "max_num_seqs": 1024,
+    "max_num_batched_tokens": 8192,
+    "spec_method": "eagle3",
+    "num_speculative_tokens": 5,
+    "draft_sample_method": "greedy",
+    "disable_any_whitespace": true,
+    "so_backend": "xgrammar",
+    "kv_cache_line": "(EngineCore pid=108571) INFO 11-03 13:33:03 [kv_cache_utils.py:1171] GPU KV cache size: 194,048 tokens, Maximum concurrency for 8,192 tokens per request: 23.69x"
+  },
+  "dataset_pool_size": 64,
+  "num_requests": 16,
+  "num_ok": 16,
+  "num_errors": 0,
+  "errors_sample": [],
+  "duration_s": 46.92426916304976,
+  "request_throughput": 0.34097494293207037,
+  "output_throughput": 147.0667550733886,
+  "total_output_tokens": 6901,
+  "mean_output_tokens": 431.3125,
+  "mean_prompt_tokens": 909.125,
+  "finish_length": 0,
+  "valid_json_rate": 1.0,
+  "schema_compliance_rate": 1.0,
+  "compact_rate": 1.0,
+  "mean_ttft_ms": 140.61182306613773,
+  "median_ttft_ms": 145.90339153073728,
+  "p99_ttft_ms": 175.9089423227124,
+  "mean_tpot_ms": 6.4372886196500145,
+  "median_tpot_ms": 6.423099250351562,
+  "p99_tpot_ms": 7.082333277082435,
+  "mean_itl_ms": 19.81359306767943,
+  "median_itl_ms": 19.80283239390701,
+  "p99_itl_ms": 23.49233640357853,
+  "mean_e2e_ms": 2916.8912675668253,
+  "spec_decode": {
+    "num_drafts": 2242.0,
+    "num_draft_tokens": 11210.0,
+    "num_accepted_tokens": 4648.0,
+    "mean_acceptance_length": 3.0731489741302407,
+    "draft_acceptance_rate": 0.41462979482604817,
+    "per_pos_acceptance": [
+      0.6770740410347904,
+      0.5249776984834968,
+      0.3626226583407672,
+      0.2814451382694023,
+      0.22702943800178413
+    ]
+  },
+  "grammar_draft": {
+    "num_drafts": 2242,
+    "num_skipped": 0,
+    "num_model_rejected": 1116,
+    "drafted": {
+      "model": 7217,
+      "grammar": 2974,
+      "pad": 1019
+    },
+    "accepted": {
+      "model": 2480,
+      "grammar": 2168,
+      "pad": 0
+    },
+    "propose_seconds": 0.18648329726420343,
+    "per_draft": {
+      "drafted": {
+        "model": 3.2190008920606603,
+        "grammar": 1.326494201605709,
+        "pad": 0.45450490633363066
+      },
+      "accepted": {
+        "model": 1.1061552185548618,
+        "grammar": 0.9669937555753791,
+        "pad": 0.0
+      },
+      "propose_us": 83.17720662988556
+    },
+    "acceptance_rate": {
+      "model": 0.343633088540945,
+      "grammar": 0.7289845326160054,
+      "pad": 0.0
+    }
+  }
+}
