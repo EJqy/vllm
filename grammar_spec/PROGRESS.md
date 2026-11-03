@@ -71,7 +71,7 @@ V2 内置了 eagle / eagle3 / ngram / ngram_gpu / suffix / draft_model / mtp / d
 | 6 | `trim_spec_tokens()` 截掉语法不允许的后缀 | 会**多保留第一个非法 token**（`+ 1`），它在验证时被 bitmask 拒掉，白占一个验证位。另外遇到终止 token 后，后面的草稿也会多留一个 | `vllm/v1/structured_output/__init__.py:386` |
 | 7 | （未提及）异步模式下调度器如何处理草稿 | `update_draft_token_ids_in_output()` 不做语法截断，原样保留 worker 草稿（注释写着 "Preserve draft slots; rejection sampling handles grammar violations"），非法草稿全靠验证时拒绝 | `vllm/v1/core/sched/scheduler.py:2910` |
 | 8 | 4.3/风险表：CPU 填 bitmask 用线程池批量 | 现有代码**只在不开投机时**才走并行填充，开投机时逐请求、逐位串行 | `vllm/v1/structured_output/__init__.py:424` |
-| 9 | matcher 用 `fork()` 试探 | 建议正确，而且还有一个硬约束：vLLM 创建 matcher 时设置了 `max_rollback_tokens=K`，在真实 matcher 上前探超过 K 个 token 就回滚不了 | `vllm/v1/structured_output/backend_xgrammar.py:202` |
+| 9 | matcher 用 `fork()` 试探 | 两种做法都可行。vLLM 创建 matcher 时传了 `max_rollback_tokens=K`，但 xgrammar 0.2.8 已废弃这个参数，回滚步数不受限（会打 DeprecationWarning）。**更正**：本文早先版本把它写成了"硬约束"，那是错的，是在写插件单元测试时发现的 | `vllm/v1/structured_output/backend_xgrammar.py:202`；`xgrammar/matcher.py:262` |
 | 10 | 无损性依据：`vllm/v1/sample/rejection_sampler.py` 的 `NO_DRAFT_PROBS` | V1 的描述属实（`:938`、`:1099`），但 EAGLE-3 默认走 V2，用的是另一份实现。V2 在没有草稿 logits 时同样按 one-hot 处理，结论成立 | `vllm/v1/worker/gpu/spec_decode/rejection_sampler_utils.py:200` |
 | 11 | 4.3：worker 的 `CachedRequestState.sampling_params.structured_outputs` 能拿到 schema | `CachedRequestState` 是 V1 的类。V2 没有对应结构，要在 `add_requests()` 里从 `new_req_data.sampling_params.structured_outputs` 自己存一份（这个字段确实会传到 worker） | `vllm/v1/worker/gpu/model_runner.py:1272` |
 | 12 | custom_class 的 `propose()` 只收到 3 个参数 | 还会收到 `slot_mappings` 关键字参数。结论（拿不到 schema 和语法状态）不变 | `vllm/v1/worker/gpu_model_runner.py:4734-4740` |

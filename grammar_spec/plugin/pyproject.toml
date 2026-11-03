@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vllm-grammar-draft"
+version = "0.1.0"
+description = "vLLM plugin: grammar-determined tokens as speculative drafts"
+requires-python = ">=3.10"
+# Uses the vllm and xgrammar of the environment it is installed into.
+dependencies = []
+
+[project.entry-points."vllm.general_plugins"]
+grammar_draft = "vllm_grammar_draft:register"
+
+[tool.setuptools.packages.find]
+include = ["vllm_grammar_draft*"]

@@ -47,12 +47,14 @@ def spec_config(method: str, k: int) -> dict | None:
     raise ValueError(method)
 
 
-def run_id_for(method, k, ws, sync, runner):
+def run_id_for(method, k, ws, sync, runner, grammar_draft=None):
     rid = f"{method}" + (f"_k{k}" if method != "none" else "") + f"_{ws}"
     if sync:
         rid += "_sync"
     if runner != "auto":
         rid += f"_{runner}"
+    if grammar_draft:
+        rid += {"hybrid": "_gd", "grammar_only": "_gdonly"}[grammar_draft]
     return rid
 
 
@@ -124,11 +126,20 @@ class Server:
     """Context manager: start a server, inspect it, stop it on exit."""
 
     def __init__(self, method, k=5, ws="compact", sync=False, runner="auto",
-                 port=8000, run_id=None, extra=()):
+                 port=8000, run_id=None, extra=(), grammar_draft=None):
+        """`grammar_draft`: None, "hybrid" or "grammar_only" enables the
+        vllm-grammar-draft plugin (which requires synchronous scheduling)."""
+        if grammar_draft and not sync:
+            raise ValueError("the grammar-draft plugin needs sync=True")
         self.method, self.k, self.ws, self.sync = method, k, ws, sync
         self.runner, self.port, self.extra = runner, port, extra
-        self.run_id = run_id or run_id_for(method, k, ws, sync, runner)
+        self.grammar_draft = grammar_draft
+        self.run_id = run_id or run_id_for(method, k, ws, sync, runner,
+                                           grammar_draft)
         self.log_path = LOG_DIR / f"serve_{self.run_id}.log"
+        self.gd_stats_path = (
+            LOG_DIR / f"serve_{self.run_id}.gd_stats.json" if grammar_draft else None
+        )
         self.proc = None
         self.meta = None
 
@@ -137,6 +148,10 @@ class Server:
         env = dict(os.environ, VLLM_SERVER_DEV_MODE="1")
         if self.runner != "auto":
             env["VLLM_USE_V2_MODEL_RUNNER"] = "1" if self.runner == "v2" else "0"
+        env.pop("GRAMMAR_DRAFT", None)
+        if self.grammar_draft:
+            env.update(GRAMMAR_DRAFT="1", GRAMMAR_DRAFT_MODE=self.grammar_draft,
+                       GRAMMAR_DRAFT_STATS=str(self.gd_stats_path))
         cmd = build_cmd(self.method, self.k, self.ws, self.sync, self.port,
                         self.extra)
         with open(self.log_path, "w") as log:
@@ -148,13 +163,20 @@ class Server:
             )
         PID_FILE.write_text(str(self.proc.pid))
         startup_s = wait_healthy(self.port, self.proc)
+        log = self.log_path.read_text(errors="replace")
         self.meta = {
             "run_id": self.run_id,
             "cmd": cmd,
-            "env": {k: env[k] for k in env if k.startswith("VLLM_")},
+            "env": {k: env[k] for k in env
+                    if k.startswith(("VLLM_", "GRAMMAR_DRAFT"))},
             "startup_s": round(startup_s, 1),
+            "grammar_draft": self.grammar_draft,
+            "grammar_draft_active": "Grammar draft enabled" in log,
+            "gd_stats_path": str(self.gd_stats_path) if self.gd_stats_path else None,
             **inspect_server(self.port, self.log_path),
         }
+        if bool(self.grammar_draft) != self.meta["grammar_draft_active"]:
+            raise RuntimeError(f"grammar draft plugin state mismatch: {self.meta}")
         meta_path = self.log_path.with_suffix(".meta.json")
         meta_path.write_text(json.dumps(self.meta, indent=2))
         return self
@@ -192,6 +214,8 @@ def main():
     s.add_argument("--runner", choices=["auto", "v1", "v2"], default="auto")
     s.add_argument("--port", type=int, default=8000)
     s.add_argument("--run-id", default=None)
+    s.add_argument("--grammar-draft", choices=["hybrid", "grammar_only"],
+                   default=None)
     sub.add_parser("stop")
     args = p.parse_args()
 
@@ -207,7 +231,7 @@ def main():
         return
 
     srv = Server(args.method, args.k, args.ws, args.sync, args.runner,
-                 args.port, args.run_id)
+                 args.port, args.run_id, grammar_draft=args.grammar_draft)
     try:
         srv.start()
     except BaseException:

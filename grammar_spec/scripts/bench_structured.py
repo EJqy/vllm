@@ -32,6 +32,7 @@ import jsonschema
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from longschema import make_samples as make_longschema_samples  # noqa: E402
 from offline_upper_bound import conv  # noqa: E402
 
 MODEL = "Qwen/Qwen3-32B"
@@ -299,28 +300,61 @@ async def run(samples, args, base_url):
         if args.reset_prefix_cache:
             async with session.post(f"{base_url}/reset_prefix_cache") as r:
                 await r.read()
+        gd0 = await read_grammar_draft_stats(args.gd_stats)
         m0 = scrape_spec_metrics(base_url)
         t0 = time.perf_counter()
         recs = await asyncio.gather(*(guarded(i, s) for i, s in enumerate(samples)))
         duration = time.perf_counter() - t0
         m1 = scrape_spec_metrics(base_url)
-    return recs, duration, spec_delta(m0, m1)
+        gd1 = await read_grammar_draft_stats(args.gd_stats)
+    gd = grammar_draft_delta(gd0, gd1) if gd0 is not None else None
+    return recs, duration, spec_delta(m0, m1), gd
+
+
+async def read_grammar_draft_stats(path):
+    """The plugin's counters (GRAMMAR_DRAFT_STATS), after its next flush."""
+    if not path:
+        return None
+    await asyncio.sleep(1.0)
+    return json.loads(Path(path).read_text())
+
+
+def grammar_draft_delta(s0, s1):
+    def sub(a, b):
+        return {k: sub(a[k], b[k]) if isinstance(a[k], dict) else a[k] - b[k]
+                for k in a}
+
+    d = sub(s1, s0)
+    drafts = max(d["num_drafts"], 1)
+    d["per_draft"] = {
+        "drafted": {k: v / drafts for k, v in d["drafted"].items()},
+        "accepted": {k: v / drafts for k, v in d["accepted"].items()},
+        "propose_us": d["propose_seconds"] / drafts * 1e6,
+    }
+    d["acceptance_rate"] = {
+        k: d["accepted"][k] / d["drafted"][k] if d["drafted"][k] else None
+        for k in d["drafted"]
+    }
+    return d
 
 
 def bench(args, server_meta=None):
     base_url = f"http://127.0.0.1:{args.port}"
     if args.dataset == "jsonmode":
         pool = load_jsonmode()
-    else:
+    elif args.dataset == "bfcl":
         pool = load_bfcl(args.bfcl_root)
+    else:
+        pool = [Sample(*x) for x in make_longschema_samples()]
     samples = select(pool, args.num_prompts, args.seed)
-    recs, duration, spec = asyncio.run(run(samples, args, base_url))
+    recs, duration, spec, gd = asyncio.run(run(samples, args, base_url))
     result = {
         "args": vars(args),
         "server": server_meta,
         "dataset_pool_size": len(pool),
         **summarize(recs, duration),
         "spec_decode": spec,
+        "grammar_draft": gd,
     }
     if args.out:
         Path(args.out).parent.mkdir(parents=True, exist_ok=True)
@@ -338,7 +372,10 @@ def bench(args, server_meta=None):
 
 def make_parser():
     p = argparse.ArgumentParser()
-    p.add_argument("--dataset", choices=["jsonmode", "bfcl"], default="jsonmode")
+    p.add_argument("--dataset", choices=["jsonmode", "bfcl", "longschema"],
+                   default="jsonmode")
+    p.add_argument("--gd-stats", default=None,
+                   help="GRAMMAR_DRAFT_STATS file of the server, if any")
     p.add_argument("--bfcl-root", default=None)
     p.add_argument("--num-prompts", type=int, default=100)
     p.add_argument("--max-concurrency", type=int, default=16)
