@@ -1,0 +1,15 @@
+[server] none_compact up in 117.0s runner=V2 async=True
+  jsonmode c=1 n=20: TPOT=15.02ms out_tps=64 AL=None schema_ok=1.00 wall=25.6s
+  jsonmode c=16 n=32: TPOT=21.32ms out_tps=464 AL=None schema_ok=1.00 wall=6.2s
+  bfcl c=1 n=20: TPOT=15.13ms out_tps=59 AL=None schema_ok=1.00 wall=9.8s
+  bfcl c=16 n=32: TPOT=26.26ms out_tps=341 AL=None schema_ok=1.00 wall=3.9s
+[server] eagle3_k5_compact up in 69.0s runner=V2 async=True
+  jsonmode c=1 n=20: TPOT=7.57ms out_tps=123 AL=2.5919439579684767 schema_ok=1.00 wall=13.6s
+  jsonmode c=16 n=32: TPOT=16.25ms out_tps=620 AL=2.7276853252647504 schema_ok=1.00 wall=4.5s
+  bfcl c=1 n=20: TPOT=9.05ms out_tps=92 AL=2.2550607287449393 schema_ok=1.00 wall=6.3s
+  bfcl c=16 n=32: TPOT=20.63ms out_tps=439 AL=2.281464530892449 schema_ok=1.00 wall=2.8s
+[server] eagle3_k5_compact_sync up in 138.0s runner=V2 async=False
+  jsonmode c=1 n=20: TPOT=7.92ms out_tps=121 AL=2.5919439579684767 schema_ok=1.00 wall=13.8s
+  jsonmode c=16 n=32: TPOT=17.12ms out_tps=649 AL=2.7194570135746607 schema_ok=1.00 wall=4.3s
+  bfcl c=1 n=20: TPOT=9.50ms out_tps=93 AL=2.2550607287449393 schema_ok=1.00 wall=6.3s
+  bfcl c=16 n=32: TPOT=20.61ms out_tps=466 AL=2.258064516129032 schema_ok=1.00 wall=2.6s

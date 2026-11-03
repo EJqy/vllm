@@ -1,0 +1,52 @@
+{
+  "none": {
+    "use_v2_model_runner": true,
+    "async_scheduling": true,
+    "max_concurrent_batches": 2
+  },
+  "none_no_async_flag": {
+    "use_v2_model_runner": true,
+    "async_scheduling": false,
+    "max_concurrent_batches": 1
+  },
+  "eagle3": {
+    "use_v2_model_runner": true,
+    "async_scheduling": true,
+    "max_concurrent_batches": 2
+  },
+  "eagle3_no_async_flag": {
+    "use_v2_model_runner": true,
+    "async_scheduling": false,
+    "max_concurrent_batches": 1
+  },
+  "ngram": {
+    "use_v2_model_runner": true,
+    "async_scheduling": true,
+    "max_concurrent_batches": 2
+  },
+  "ngram_no_async_flag": {
+    "use_v2_model_runner": true,
+    "async_scheduling": false,
+    "max_concurrent_batches": 1
+  },
+  "suffix": {
+    "use_v2_model_runner": true,
+    "async_scheduling": true,
+    "max_concurrent_batches": 2
+  },
+  "suffix_no_async_flag": {
+    "use_v2_model_runner": true,
+    "async_scheduling": false,
+    "max_concurrent_batches": 1
+  },
+  "custom_class": {
+    "use_v2_model_runner": false,
+    "async_scheduling": false,
+    "max_concurrent_batches": 1
+  },
+  "custom_class_no_async_flag": {
+    "use_v2_model_runner": false,
+    "async_scheduling": false,
+    "max_concurrent_batches": 1
+  }
+}

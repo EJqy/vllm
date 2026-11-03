@@ -1,0 +1,8 @@
+# REPORT.md lines 301-417, TIK=/root/.cache/grammar_spec/qwen_tiktoken/qwen.tiktoken, sha256(qwen.tiktoken)=b2b1b8dfb5cc5f024bafc373121c6aba3f66f9a5a0269e243470a1de16a33186
+# data: /root/.cache/grammar_spec/gorilla/berkeley-function-call-leaderboard/bfcl_eval/data @ 6ea57973c7a6097fd7c5915698c54c17c5b1b6c8
+## schema = name + arguments
+compact=False samples=633 skipped=25 tokens=22558 avg_len=35.6 forced=3.6% jump_fwd_extra=26.3% grammar_free=29.8% target_passes_saved=27.0%
+compact=True samples=631 skipped=27 tokens=17992 avg_len=28.5 forced=4.5% jump_fwd_extra=55.8% grammar_free=60.2% target_passes_saved=53.2%
+## schema = arguments only (line 67 replaced)
+compact=False samples=633 skipped=25 tokens=15061 avg_len=23.8 forced=4.8% jump_fwd_extra=15.7% grammar_free=20.5% target_passes_saved=16.3%
+compact=True samples=631 skipped=27 tokens=12412 avg_len=19.7 forced=6.2% jump_fwd_extra=36.2% grammar_free=42.4% target_passes_saved=37.3%

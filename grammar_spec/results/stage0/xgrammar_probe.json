@@ -1,0 +1,156 @@
+{
+  "xgrammar": "0.2.8",
+  "api": {
+    "GrammarMatcher.fill_next_token_bitmask": true,
+    "GrammarMatcher.find_jump_forward_string": true,
+    "GrammarMatcher.accept_token": true,
+    "GrammarMatcher.fork": true,
+    "GrammarMatcher.is_terminated": true,
+    "GrammarMatcher.rollback": true,
+    "GrammarMatcher.traverse_draft_tree": true,
+    "apply_token_bitmask_inplace": true
+  },
+  "compact_ws": [
+    {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "type": "integer"
+          },
+          "b": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ]
+      },
+      "text": "{\"a\":1, \"b\":2}",
+      "accepted_in_compact_mode": false
+    },
+    {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "type": "integer"
+          },
+          "b": {
+            "type": "integer"
+          }
+        }
+      },
+      "text": "{\"a\":1, \"b\":2}",
+      "accepted_in_compact_mode": false
+    },
+    {
+      "schema": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "text": "[1, 2]",
+      "accepted_in_compact_mode": false
+    },
+    {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "x"
+        ]
+      },
+      "text": "{\"x\":[\"a\", \"b\"]}",
+      "accepted_in_compact_mode": false
+    },
+    {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "o": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "a",
+              "b"
+            ]
+          }
+        },
+        "required": [
+          "o"
+        ]
+      },
+      "text": "{\"o\":{\"a\":1, \"b\":2}}",
+      "accepted_in_compact_mode": false
+    },
+    {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "b": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ]
+      },
+      "text": "{\"a\":1, \"b\":2}",
+      "accepted_in_compact_mode": false
+    },
+    {
+      "schema": {
+        "type": "object"
+      },
+      "text": "{\"a\":1, \"b\":2}",
+      "accepted_in_compact_mode": true
+    },
+    {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "type": "integer"
+          },
+          "b": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ]
+      },
+      "text": "{\"a\": 1,\"b\":2}",
+      "accepted_in_compact_mode": false
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{"sid": "simple_python_361", "text": "{\"name\":\"restaurant_finder\",\"arguments\":{\"city\":\"New York\",\"cuisine\":\"Italian\",\"diet\":\"Gluten-free\"}}", "completion_tokens": 26, "schema_ok": true, "error": ""}
+{"sid": "live_simple_19-3-15", "text": "{\"name\":\"get_current_weather\",\"arguments\":{\"location\":\"Quintana Roo, Mexico\",\"unit\":\"celsius\"}}", "completion_tokens": 25, "schema_ok": true, "error": ""}
+{"sid": "live_simple_192-116-0", "text": "{\"name\":\"Weather_1_GetWeather\",\"arguments\":{\"city\":\"Pacifica\",\"date\":\"2023-04-11\"}}", "completion_tokens": 32, "schema_ok": true, "error": ""}
+{"sid": "simple_python_130", "text": "{\"name\":\"finance_calculator.npv\",\"arguments\":{\"cash_flows\":[-50000,10000,15000,20000,25000,30000],\"discount_rate\":0.08}}", "completion_tokens": 62, "schema_ok": true, "error": ""}
+{"sid": "live_simple_91-52-0", "text": "{\"name\":\"fetchPerson\",\"arguments\":{\"id\":4}}", "completion_tokens": 15, "schema_ok": true, "error": ""}
+{"sid": "live_simple_228-119-0", "text": "{\"name\":\"text_to_speech.convert\",\"arguments\":{\"text\":\"I am a pretty girl\"}}", "completion_tokens": 20, "schema_ok": true, "error": ""}
+{"sid": "live_simple_239-125-2", "text": "{\"name\":\"play_spotify_song\",\"arguments\":{\"query\":\"Shape of You\"}}", "completion_tokens": 18, "schema_ok": true, "error": ""}
+{"sid": "live_simple_149-95-6", "text": "{\"name\":\"cmd_controller.execute\",\"arguments\":{\"command\":\"echo hi\"}}", "completion_tokens": 16, "schema_ok": true, "error": ""}
+{"sid": "simple_python_17", "text": "{\"name\":\"get_prime_factors\",\"arguments\":{\"number\":450,\"formatted\":true}}", "completion_tokens": 22, "schema_ok": true, "error": ""}
+{"sid": "live_simple_151-95-8", "text": "{\"name\":\"cmd_controller.execute\",\"arguments\":{\"command\":\"netsh wlan disconnect\"}}", "completion_tokens": 18, "schema_ok": true, "error": ""}
+{"sid": "simple_python_197", "text": "{\"name\":\"get_air_quality_index\",\"arguments\":{\"location\":\"San Diego\",\"time\":\"12pm\"}}", "completion_tokens": 24, "schema_ok": true, "error": ""}
+{"sid": "simple_python_196", "text": "{\"name\":\"air_quality\",\"arguments\":{\"location\":\"London\",\"date\":\"08-16-2022\"}}", "completion_tokens": 27, "schema_ok": true, "error": ""}
+{"sid": "simple_python_316", "text": "{\"name\":\"get_sport_ranking\",\"arguments\":{\"sport\":\"Tennis\",\"player_name\":\"Serena Williams\"}}", "completion_tokens": 25, "schema_ok": true, "error": ""}
+{"sid": "simple_python_146", "text": "{\"name\":\"stock_price\",\"arguments\":{\"company\":\"Amazon\",\"days\":3}}", "completion_tokens": 19, "schema_ok": true, "error": ""}
+{"sid": "live_simple_185-110-0", "text": "{\"name\":\"get_service_providers\",\"arguments\":{\"service_id\":2,\"province_id\":3,\"rating\":4.5,\"start_available_date\":\"2023-09-30\"}}", "completion_tokens": 45, "schema_ok": true, "error": ""}
+{"sid": "simple_python_34", "text": "{\"name\":\"travel_itinerary_generator\",\"arguments\":{\"destination\":\"Tokyo\",\"days\":7,\"daily_budget\":100,\"exploration_type\":\"nature\"}}", "completion_tokens": 34, "schema_ok": true, "error": ""}
+{"sid": "live_simple_211-117-3", "text": "{\"name\":\"Movies_3_FindMovies\",\"arguments\":{\"genre\":\"Comedy\",\"cast\":\"James Corden\"}}", "completion_tokens": 24, "schema_ok": true, "error": ""}
+{"sid": "live_simple_220-117-12", "text": "{\"name\":\"Movies_3_FindMovies\",\"arguments\":{\"directed_by\":\"Alexander Mackendrick\",\"genre\":\"Thriller\",\"cast\":\"dontcare\"}}", "completion_tokens": 32, "schema_ok": true, "error": ""}
+{"sid": "live_simple_78-39-0", "text": "{\"name\":\"send_email\",\"arguments\":{\"to_address\":\"andy@gorilla.ai\",\"subject\":\"Sales Forecast Request\",\"body\":\"where is the latest sales forecast spreadsheet?\"}}", "completion_tokens": 36, "schema_ok": true, "error": ""}
+{"sid": "simple_python_137", "text": "{\"name\":\"calculate_stock_return\",\"arguments\":{\"investment_amount\":5000,\"annual_growth_rate\":0.06,\"holding_period\":5}}", "completion_tokens": 33, "schema_ok": true, "error": ""}
